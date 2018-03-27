@@ -50,4 +50,16 @@ void user::userAuth(QList<QSqlRecord> rec)
 
                 this->hide();
             }
+            ui->lineEdit->clear();
+            ui->lineEdit_2->clear();
+}
+void user::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    {
+        emit btnClick();
+        emit uCheck();
+    } else {
+        QWidget::keyPressEvent(event);
+    }
 }

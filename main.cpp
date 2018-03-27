@@ -32,6 +32,9 @@ int main(int argc, char *argv[])
 
     //QObject::connect(&w, SIGNAL(giveFoundVal(int,QString,QString,QString,QString,QString,QString,QString)), &dbq, SLOT(getFoundVal(int,QString,QString,QString,QString,QString,QString,QString)));
     QObject::connect(&w, SIGNAL(upd()), &dbq, SLOT(updTable()));
+
+    QObject::connect(&w, SIGNAL(userToId(QString)), &dbq, SLOT(userToID(QString)));
+    QObject::connect(&dbq, SIGNAL(userID(int)), &w, SLOT(getUserId(int)));
     u.show();
     return a.exec();
 }

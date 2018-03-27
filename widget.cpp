@@ -114,6 +114,7 @@ void Widget::updateTable(QSqlRelationalTableModel *m)
 void Widget::on_pushButton_2_clicked()
 {
     int id = userID;
+    QString unamestr;
     QString uname;
     QString uString;
     QString query;
@@ -125,14 +126,17 @@ void Widget::on_pushButton_2_clicked()
         uname = "";
         uString = "";
     } else {
-        uname = ui->comboBox_2->currentText();
-        uString = " AND user IN (%3)";
+        unamestr = ui->comboBox_2->currentText();
+        emit userToId(unamestr);
+        uname = QString::number(intUName);
+        //uString = " AND user IN (SELECT id_user FROM users WHERE user LIKE '%3')"; //это не работает
+        uString = " AND user LIKE '%3%'"; //и это тоже не работает
     }
     //ORGANIZATION//
     QString org = ui->lineEdit->text();
     if (org != "")
     {
-        oString = " AND org IN (%5)";
+        oString = " AND org LIKE '%%5%'";
     } else {
         oString = "";
     }
@@ -143,7 +147,7 @@ void Widget::on_pushButton_2_clicked()
         qString = "";
     } else {
         query = ui->comboBox->currentText();
-        qString = " AND query IN (%4)";
+        qString = " AND query LIKE '%%4%'";
     }
     //DATE//
     int dateTimeFrom = ui->dateTimeEdit_3->dateTime().toTime_t();
@@ -152,7 +156,7 @@ void Widget::on_pushButton_2_clicked()
     {
         dateTimeFrom = dateTimeTo;
     }
-    QString dTFString = "dateTime BETWEEN %1 AND %2";
+    QString dTFString = "dateTime BETWEEN '%1' AND '%2'";
     QueryString = dTFString+uString+qString+oString;
 
     if (uString != "")
@@ -191,9 +195,10 @@ void Widget::on_pushButton_2_clicked()
             }
         }
     }
-    //QMessageBox::information(this, "error", qpString);
+    QMessageBox::information(this, "error", qpString);
     emit upd();
     //emit upd();
+    ui->lineEdit->clear();
     Q_UNUSED(id);
 }
 
@@ -237,4 +242,10 @@ void Widget::on_pushButton_3_clicked()
     int dateTimeTo = ui->dateTimeEdit_2->dateTime().toTime_t();
     qpString = "dateTime BETWEEN "+QString::number(dateTimeFrom)+" AND "+QString::number(dateTimeTo);
     emit upd();
+}
+
+void Widget::getUserId(int id)
+{
+    intUName = id;
+    QMessageBox::information(this, "00", QString::number(id));
 }

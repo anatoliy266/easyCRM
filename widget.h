@@ -28,11 +28,13 @@ signals:
     void giveID(int ID);
     void properties();
     void upd();
+    void userToId(QString u);
 public slots:
     void getId(int ID, QString uName);
     void updateTable(QSqlRelationalTableModel* m);
     void getQueryTypes(QStringList strL);
     void getUsername(QList<QSqlRecord> uList);
+    void getUserId(int id);
 private slots:
     void on_pushButton_clicked();
 
@@ -44,7 +46,7 @@ private slots:
 
 private:
     Ui::Widget *ui;
-    int userID;
+    int userID, intUName;
     QString username, QueryString, qpString;
     QSqlDatabase db;
     QSqlRecord rec;

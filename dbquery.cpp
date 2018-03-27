@@ -65,12 +65,12 @@ void DBquery::updTable()
     model = new QSqlRelationalTableModel();
     model->setTable("crm");
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("user"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("dateTime"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("org"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("query"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("fio"));
-    model->setHeaderData(6, Qt::Horizontal, QObject::tr("phone"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Пользователь"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Дата и время"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Организация"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Тема запроса"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Ф.И.О."));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("Телефон"));
     model->setSort(0, Qt::AscendingOrder);
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     emit updateTable(model);
@@ -95,4 +95,17 @@ void DBquery::queryTypes()
         }
     }
     emit giveQueryTypes(str);
+}
+
+void DBquery::userToID(QString u)
+{
+    QSqlQuery qq;
+    int id;
+    qq.exec("SELECT id_user FROM users WHERE user LIKE '"+u+"'");
+    while (qq.next())
+    {
+        id = qq.record().field(0).value().toInt();
+        emit userID(id);
+    }
+
 }

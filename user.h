@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QKeyEvent>
 
 namespace Ui {
 class user;
@@ -30,6 +31,8 @@ private slots:
     void on_pushButton_2_clicked();
 public slots:
     void userAuth(QList<QSqlRecord> rec);
+protected:
+    void keyPressEvent(QKeyEvent *event);
 private:
     Ui::user *ui;
     QSqlDatabase dbb;

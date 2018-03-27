@@ -28,6 +28,9 @@ void addcall::on_pushButton_clicked()
     QString phone = ui->lineEdit_3->text();
     emit addQuery(user, dateTime, query, org, fio, phone);
     emit updTbl();
+    ui->lineEdit->clear();
+    ui->lineEdit_2->clear();
+    ui->lineEdit_3->clear();
     this->hide();
 }
 
