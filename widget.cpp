@@ -6,6 +6,46 @@ Widget::Widget(QWidget *parent) :
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    QGridLayout* GL = new QGridLayout();
+    for (int i =0; i<3; i++)
+    {
+        GL->setColumnMinimumWidth(i, this->width()/4);
+    }
+    for (int j = 0; j<9; j++)
+    {
+        GL->setRowMinimumHeight(j, this->height()/10);
+    }
+
+    GL->addWidget(ui->label, 0, 0);
+    GL->addWidget(ui->groupBox, 1, 0, 7, 1);
+    GL->addWidget(ui->pushButton, 8, 0, 2, 1);
+    GL->addWidget(ui->tableView, 0, 1, 9, 3);
+    GL->addWidget(ui->dateTimeEdit, 9, 1);
+    GL->addWidget(ui->dateTimeEdit_2, 9, 2);
+    GL->addWidget(ui->pushButton_3, 9, 3);
+    this->setLayout(GL);
+    QGridLayout* cbGL = new QGridLayout();
+    cbGL->addWidget(ui->label_2, 0, 0, 1, 4);
+    cbGL->addWidget(ui->comboBox_2, 1, 0, 1, 3);
+    cbGL->addWidget(ui->checkBox, 1, 3);
+    cbGL->addWidget(ui->label_3, 2, 0, 1, 3);
+    cbGL->addWidget(ui->lineEdit, 3, 0, 1, 4);
+    cbGL->addWidget(ui->label_4, 4, 0, 1, 4);
+    cbGL->addWidget(ui->comboBox, 5, 0, 1, 3);
+    cbGL->addWidget(ui->checkBox_2, 5, 3);
+    cbGL->addWidget(ui->groupBox_2, 6, 0, 3, 4);
+    cbGL->addWidget(ui->pushButton_2, 9, 0, 1, 4);
+    ui->groupBox->setLayout(cbGL);
+    QGridLayout* cb2GL = new QGridLayout();
+    cb2GL->addWidget(ui->label_5, 0, 0, 1, 4);
+    cb2GL->addWidget(ui->dateTimeEdit_3, 1, 0, 1, 4);
+    cb2GL->addWidget(ui->label_6, 2, 0, 1, 4);
+    cb2GL->addWidget(ui->dateTimeEdit_4, 3, 0, 1, 4);
+    ui->groupBox_2->setLayout(cb2GL);
+    ui->dateTimeEdit_4->setDateTime(QDateTime::currentDateTime());
+    ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
+    ui->dateTimeEdit_3->setDateTime(QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t()-86400));
+    ui->dateTimeEdit->setDateTime(QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t()-86400));
 }
 
 Widget::~Widget()
@@ -29,22 +69,46 @@ void Widget::on_pushButton_clicked()
 
 void Widget::updateTable(QSqlRelationalTableModel *m)
 {
-    m->setTable("crm");
-    ui->tableView->setModel(m);
+    //m->setTable("crm");
+    m->setRelation(1, QSqlRelation("users", "id_user", "user"));
+    //QMessageBox::information(this, "ololo", qpString);
+
+    int coll = m->fieldIndex("dateTime");
+    m->select();
     if (qpString != "")
     {
-        m->setFilter(qpString);
-        //qpString = "";
+
+        if (uT.count() != 0)
+        {
+            for (int j = 0; j<m->rowCount(); j++)
+            {
+                m->setData(m->index(j, coll), uT.value(j));
+            }
+            uT.clear();
+            m->setFilter(qpString);
+            qpString = "";
+        }
+    } else {
+
     }
-    m->select();
-    if (!m->select())
+    for (int i = 0; i<m->rowCount(); i++)
     {
-        QMessageBox::information(this, "error", qpString);
+
+        uT.append(m->data(m->index(i, coll)));
+        QDateTime dT = QDateTime::fromTime_t(m->data(m->index(i, coll)).toInt());
+        m->setData(m->index(i, coll), dT);
     }
+    //m->submitAll();
+    ui->tableView->setModel(m);
     ui->tableView->hideColumn(0);
+    for (int i = 0; i<m->columnCount(); i++)
+    {
+        ui->tableView->setColumnWidth(i, (ui->tableView->width()-10)/(m->columnCount()-1));
+    }
     ui->tableView->show();
     ui->dateTimeEdit_4->setDateTime(QDateTime::currentDateTime());
     ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
+    //qpString = "";
 }
 
 void Widget::on_pushButton_2_clicked()
@@ -127,8 +191,10 @@ void Widget::on_pushButton_2_clicked()
             }
         }
     }
-    QMessageBox::information(this, "error", qpString);
+    //QMessageBox::information(this, "error", qpString);
     emit upd();
+    //emit upd();
+    Q_UNUSED(id);
 }
 
 void Widget::getQueryTypes(QStringList strL)
@@ -167,6 +233,8 @@ void Widget::on_checkBox_clicked()
 
 void Widget::on_pushButton_3_clicked()
 {
-    qpString = "";
+    int dateTimeFrom = ui->dateTimeEdit->dateTime().toTime_t();
+    int dateTimeTo = ui->dateTimeEdit_2->dateTime().toTime_t();
+    qpString = "dateTime BETWEEN "+QString::number(dateTimeFrom)+" AND "+QString::number(dateTimeTo);
     emit upd();
 }

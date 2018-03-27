@@ -71,8 +71,8 @@ void DBquery::updTable()
     model->setHeaderData(4, Qt::Horizontal, QObject::tr("query"));
     model->setHeaderData(5, Qt::Horizontal, QObject::tr("fio"));
     model->setHeaderData(6, Qt::Horizontal, QObject::tr("phone"));
-    model->setRelation(1, QSqlRelation("users", "id", "user"));
     model->setSort(0, Qt::AscendingOrder);
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     emit updateTable(model);
 
 }

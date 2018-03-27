@@ -10,6 +10,8 @@
 #include <QSqlField>
 #include <QTableView>
 #include <QSqlRelationalTableModel>
+#include <QGridLayout>
+#include <QList>
 
 namespace Ui {
 class Widget;
@@ -46,6 +48,7 @@ private:
     QString username, QueryString, qpString;
     QSqlDatabase db;
     QSqlRecord rec;
+    QList<QVariant> uT;
 };
 
 #endif // WIDGET_H
