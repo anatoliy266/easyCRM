@@ -6,6 +6,7 @@ user::user(QWidget *parent) :
     ui(new Ui::user)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Вход");
 }
 
 user::~user()
@@ -47,7 +48,6 @@ void user::userAuth(QList<QSqlRecord> rec)
                 QMessageBox::information(this, "ERROR", "INCORRECT USER OR LOGIN!!!");
             } else {
                 emit authSig(lRec.value(id).field(0).value().toInt(), username);
-
                 this->hide();
             }
             ui->lineEdit->clear();

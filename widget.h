@@ -12,6 +12,9 @@
 #include <QSqlRelationalTableModel>
 #include <QGridLayout>
 #include <QList>
+#include <QStyledItemDelegate>
+#include "noteditabledelegate.h"
+#include <QClipboard>
 
 namespace Ui {
 class Widget;
@@ -24,6 +27,7 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget *parent = 0);
     ~Widget();
+
 signals:
     void giveID(int ID);
     void properties();
@@ -35,6 +39,7 @@ public slots:
     void getQueryTypes(QStringList strL);
     void getUsername(QList<QSqlRecord> uList);
     void getUserId(int id);
+    void dataChange(QModelIndex lT, QModelIndex bR);
 private slots:
     void on_pushButton_clicked();
 
@@ -44,6 +49,10 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_checkBox_2_clicked();
+
+protected:
+
 private:
     Ui::Widget *ui;
     int userID, intUName;
@@ -51,6 +60,14 @@ private:
     QSqlDatabase db;
     QSqlRecord rec;
     QList<QVariant> uT;
+    NotEditableDelegate* delegate;
+    QString changeVal;
+    //QBrush *brush;
+    //QPalette *palette;
+    bool editStrategy;
+
 };
+
+
 
 #endif // WIDGET_H

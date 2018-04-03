@@ -13,11 +13,11 @@ DBquery::~DBquery()
 
 }
 
-void DBquery::getAddQuery(int user, int dateTime, QString qquery, QString org, QString fio, QString phone)
+void DBquery::getAddQuery(int user, int dateTime, QString qquery, QString org, QString fio, QString phone, QString comment)
 {
     QSqlQuery query;
-    QString strQuery = "INSERT INTO crm(user, dateTime, org, query, fio, telephone)"
-                       "VALUES(:user, :dateTime, :org, :query, :fio, :telephone)";
+    QString strQuery = "INSERT INTO crm(user, dateTime, org, query, fio, telephone, comment)"
+                       "VALUES(:user, :dateTime, :org, :query, :fio, :telephone, :comment)";
     query.prepare(strQuery);
     query.bindValue(":user", user);
     query.bindValue(":dateTime", dateTime);
@@ -25,6 +25,7 @@ void DBquery::getAddQuery(int user, int dateTime, QString qquery, QString org, Q
     query.bindValue(":query", qquery);
     query.bindValue(":fio", fio);
     query.bindValue(":telephone", phone);
+    query.bindValue(":comment", comment);
     query.exec();
 }
 
@@ -71,8 +72,9 @@ void DBquery::updTable()
     model->setHeaderData(4, Qt::Horizontal, QObject::tr("Тема запроса"));
     model->setHeaderData(5, Qt::Horizontal, QObject::tr("Ф.И.О."));
     model->setHeaderData(6, Qt::Horizontal, QObject::tr("Телефон"));
+    model->setHeaderData(7, Qt::Horizontal, QObject::tr("Комментарий"));
     model->setSort(0, Qt::AscendingOrder);
-    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->setEditStrategy(QSqlTableModel::OnFieldChange);
     emit updateTable(model);
 
 }
@@ -83,7 +85,7 @@ void DBquery::queryTypes()
     if (db.open())
     {
         QSqlQuery query;
-        query.exec("SELECT * FROM query_type");
+        query.exec("SELECT * FROM query_type ORDER BY q_type");
         if (!query.exec())
         {
 
@@ -108,4 +110,15 @@ void DBquery::userToID(QString u)
         emit userID(id);
     }
 
+}
+
+void DBquery::getAddQueryT(int dateTime, QString sTime)
+{
+    QSqlQuery queryT;
+    QString strQueryT = "INSERT INTO time(unixTime, strTime)"
+                        "VALUES(:unixTime, :strTime)";
+    queryT.prepare(strQueryT);
+    queryT.bindValue(":unixTime", dateTime);
+    queryT.bindValue(":strTime", sTime);
+    queryT.exec();
 }

@@ -10,6 +10,7 @@ addcall::addcall(QWidget *parent) :
     ui(new Ui::addcall)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Новая запись");
 }
 
 addcall::~addcall()
@@ -24,13 +25,18 @@ void addcall::on_pushButton_clicked()
     int user = userID;
     QDateTime qdate = QDateTime::currentDateTime();
     int dateTime = qdate.toTime_t();
+    QString sTime = qdate.toString("dd.MM.yyyy hh:mm");
     QString query = ui->comboBox->currentText();
     QString phone = ui->lineEdit_3->text();
-    emit addQuery(user, dateTime, query, org, fio, phone);
+    QString comment = ui->lineEdit_4->text();
+    emit addQuery(user, dateTime, query, org, fio, phone, comment);
+    emit addQueryT(dateTime, sTime);
     emit updTbl();
+    emit onlyMe();
     ui->lineEdit->clear();
     ui->lineEdit_2->clear();
     ui->lineEdit_3->clear();
+    ui->lineEdit_4->clear();
     this->hide();
 }
 

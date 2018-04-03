@@ -15,9 +15,11 @@ public:
     explicit addcall(QWidget *parent = 0);
     ~addcall();
 signals:
-    void addQuery(int user, int dateTime, QString query, QString org, QString fio, QString phone);
+    void addQuery(int user, int dateTime, QString query, QString org, QString fio, QString phone, QString comment);
+    void addQueryT(int dateTime, QString sTime);
     void askQueryTypes();
     void updTbl();
+    void onlyMe();
 public slots:
     void getID(int ID);
     void getQueryTypes(QStringList str);

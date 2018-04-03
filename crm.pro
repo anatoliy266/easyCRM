@@ -28,15 +28,21 @@ SOURCES += \
         widget.cpp \
     user.cpp \
     addcall.cpp \
-    dbquery.cpp
+    dbquery.cpp \
+    noteditabledelegate.cpp
 
 HEADERS += \
         widget.h \
     user.h \
     addcall.h \
-    dbquery.h
+    dbquery.h \
+    noteditabledelegate.h
 
 FORMS += \
         widget.ui \
     user.ui \
     addcall.ui
+
+RESOURCES += \
+    resourses.qrc
+RC_FILE = icon.rc

@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
     addcall ac;
     DBquery dbq;
     QObject::connect(&u, SIGNAL(authSig(int,QString)), &w, SLOT(getId(int,QString)));
-    QObject::connect(&ac, SIGNAL(addQuery(int,int,QString,QString,QString,QString)), &dbq, SLOT(getAddQuery(int,int,QString,QString,QString,QString)));
+    QObject::connect(&ac, SIGNAL(addQuery(int,int,QString,QString,QString,QString, QString)), &dbq, SLOT(getAddQuery(int,int,QString,QString,QString,QString, QString)));
+    QObject::connect(&ac, SIGNAL(addQueryT(int,QString)), &dbq, SLOT(getAddQueryT(int,QString)));
 
     QObject::connect(&u, SIGNAL(btnClick()), &dbq, SLOT(updTable()));
     QObject::connect(&ac, SIGNAL(updTbl()), &dbq, SLOT(updTable()));
@@ -35,6 +36,8 @@ int main(int argc, char *argv[])
 
     QObject::connect(&w, SIGNAL(userToId(QString)), &dbq, SLOT(userToID(QString)));
     QObject::connect(&dbq, SIGNAL(userID(int)), &w, SLOT(getUserId(int)));
+
+    QObject::connect(&ac, SIGNAL(onlyMe()), &w, SLOT(on_pushButton_3_clicked()));
     u.show();
     return a.exec();
 }

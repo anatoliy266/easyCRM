@@ -16,8 +16,16 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Widget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QTableView" name="tableView">
    <property name="geometry">
@@ -34,6 +42,11 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </widget>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
@@ -45,7 +58,7 @@
     </rect>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -82,6 +95,11 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>username</string>
     </property>
@@ -100,6 +118,11 @@
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Организация</string>
@@ -120,6 +143,11 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Все</string>
     </property>
@@ -139,6 +167,11 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
@@ -154,6 +187,11 @@
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Тема запроса</string>
@@ -173,6 +211,11 @@
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
@@ -195,6 +238,11 @@
       <width>271</width>
       <height>171</height>
      </size>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
     </property>
     <property name="title">
      <string>Дата</string>
@@ -291,6 +339,11 @@
       <height>41</height>
      </size>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Найти</string>
     </property>
@@ -310,6 +363,11 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_2">
     <property name="geometry">
@@ -326,6 +384,11 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Все</string>
     </property>
@@ -341,7 +404,7 @@
     </rect>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -374,7 +437,7 @@
     </rect>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -415,6 +478,11 @@
      <height>41</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </widget>
   <widget class="QDateTimeEdit" name="dateTimeEdit_2">
    <property name="geometry">
@@ -437,6 +505,11 @@
      <height>41</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
@@ -458,6 +531,11 @@
      <width>121</width>
      <height>41</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Показать</string>

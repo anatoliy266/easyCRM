@@ -6,6 +6,14 @@ Widget::Widget(QWidget *parent) :
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    //this->setStyleSheet("background-image: url(:/resourse/images/bg1.jpg);");
+    //this->setAttribute(Qt::WA_TranslucentBackground);
+    //brush = new QBrush;
+    //palette = new QPalette;
+    //brush->setTextureImage(QImage(":/resourse/images/bg1.jpg"));
+    //palette->setBrush(QPalette::Window, *brush);
+    //this->setPalette(*palette);
+    this->setWindowTitle("Фиксатор звонков - 2000");
     QGridLayout* GL = new QGridLayout();
     for (int i =0; i<3; i++)
     {
@@ -46,11 +54,15 @@ Widget::Widget(QWidget *parent) :
     ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
     ui->dateTimeEdit_3->setDateTime(QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t()-86400));
     ui->dateTimeEdit->setDateTime(QDateTime::fromTime_t(QDateTime::currentDateTime().toTime_t()-86400));
+
+
 }
 
 Widget::~Widget()
 {
     delete ui;
+    //delete brush;
+    //delete palette;
 }
 
 void Widget::getId(int ID, QString uName)
@@ -60,6 +72,7 @@ void Widget::getId(int ID, QString uName)
     userID = ID;
     username = uName;
     emit properties();
+    emit ui->pushButton_3->clicked();
 }
 
 void Widget::on_pushButton_clicked()
@@ -69,46 +82,36 @@ void Widget::on_pushButton_clicked()
 
 void Widget::updateTable(QSqlRelationalTableModel *m)
 {
-    //m->setTable("crm");
     m->setRelation(1, QSqlRelation("users", "id_user", "user"));
-    //QMessageBox::information(this, "ololo", qpString);
-
-    int coll = m->fieldIndex("dateTime");
+    m->setRelation(2, QSqlRelation("time", "unixTime", "strTime"));
     m->select();
     if (qpString != "")
     {
-
-        if (uT.count() != 0)
-        {
-            for (int j = 0; j<m->rowCount(); j++)
-            {
-                m->setData(m->index(j, coll), uT.value(j));
-            }
-            uT.clear();
-            m->setFilter(qpString);
-            qpString = "";
-        }
-    } else {
-
-    }
-    for (int i = 0; i<m->rowCount(); i++)
-    {
-
-        uT.append(m->data(m->index(i, coll)));
-        QDateTime dT = QDateTime::fromTime_t(m->data(m->index(i, coll)).toInt());
-        m->setData(m->index(i, coll), dT);
-    }
-    //m->submitAll();
+        m->setFilter(qpString);
+        qpString = "";
+    } else {}
     ui->tableView->setModel(m);
     ui->tableView->hideColumn(0);
-    for (int i = 0; i<m->columnCount(); i++)
+    /*for (int i = 0; i<m->columnCount(); i++)
     {
         ui->tableView->setColumnWidth(i, (ui->tableView->width()-10)/(m->columnCount()-1));
-    }
+    }*/
     ui->tableView->show();
     ui->dateTimeEdit_4->setDateTime(QDateTime::currentDateTime());
     ui->dateTimeEdit_2->setDateTime(QDateTime::currentDateTime());
-    //qpString = "";
+    if (editStrategy)
+    {
+        ui->tableView->setEditTriggers(QAbstractItemView::AllEditTriggers);
+        editStrategy = false;
+    } else {
+        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    }
+    ui->tableView->setSortingEnabled(true);
+    //ui->tableView->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+    delegate = new NotEditableDelegate(this);
+    ui->tableView->setItemDelegateForColumn(1, delegate);
+    ui->tableView->setItemDelegateForColumn(2, delegate);
+    ui->tableView->setItemDelegateForColumn(4, delegate);
 }
 
 void Widget::on_pushButton_2_clicked()
@@ -129,14 +132,13 @@ void Widget::on_pushButton_2_clicked()
         unamestr = ui->comboBox_2->currentText();
         emit userToId(unamestr);
         uname = QString::number(intUName);
-        //uString = " AND user IN (SELECT id_user FROM users WHERE user LIKE '%3')"; //это не работает
-        uString = " AND user LIKE '%3%'"; //и это тоже не работает
+        uString = " AND crm.user LIKE '%3%'";
     }
     //ORGANIZATION//
     QString org = ui->lineEdit->text();
     if (org != "")
     {
-        oString = " AND org LIKE '%%5%'";
+        oString = " AND crm.org LIKE '%%5%'";
     } else {
         oString = "";
     }
@@ -147,7 +149,7 @@ void Widget::on_pushButton_2_clicked()
         qString = "";
     } else {
         query = ui->comboBox->currentText();
-        qString = " AND query LIKE '%%4%'";
+        qString = " AND crm.query LIKE '%%4%'";
     }
     //DATE//
     int dateTimeFrom = ui->dateTimeEdit_3->dateTime().toTime_t();
@@ -156,7 +158,7 @@ void Widget::on_pushButton_2_clicked()
     {
         dateTimeFrom = dateTimeTo;
     }
-    QString dTFString = "dateTime BETWEEN '%1' AND '%2'";
+    QString dTFString = "crm.dateTime BETWEEN '%1' AND '%2'";
     QueryString = dTFString+uString+qString+oString;
 
     if (uString != "")
@@ -195,9 +197,7 @@ void Widget::on_pushButton_2_clicked()
             }
         }
     }
-    QMessageBox::information(this, "error", qpString);
     emit upd();
-    //emit upd();
     ui->lineEdit->clear();
     Q_UNUSED(id);
 }
@@ -228,7 +228,7 @@ void Widget::getUsername(QList<QSqlRecord> uList)
 
 void Widget::on_checkBox_clicked()
 {
-    if (ui->checkBox_2->isChecked())
+    if (ui->checkBox->isChecked())
     {
         ui->comboBox_2->setEnabled(false);
     } else {
@@ -240,12 +240,32 @@ void Widget::on_pushButton_3_clicked()
 {
     int dateTimeFrom = ui->dateTimeEdit->dateTime().toTime_t();
     int dateTimeTo = ui->dateTimeEdit_2->dateTime().toTime_t();
-    qpString = "dateTime BETWEEN "+QString::number(dateTimeFrom)+" AND "+QString::number(dateTimeTo);
+    qpString = "crm.dateTime BETWEEN "+QString::number(dateTimeFrom)+" AND "+QString::number(dateTimeTo) + " AND crm.user LIKE "+QString::number(userID);
+    //QMessageBox::information(this, "", QString::number(userID));
+    //QMessageBox::information(this, "", qpString);
+    editStrategy = true;
+
     emit upd();
 }
 
 void Widget::getUserId(int id)
 {
     intUName = id;
-    QMessageBox::information(this, "00", QString::number(id));
+}
+
+void Widget::dataChange(QModelIndex lT, QModelIndex bR)
+{
+    changeVal = ui->tableView->model()->data(lT).toString();
+
+    Q_UNUSED(bR);
+}
+
+void Widget::on_checkBox_2_clicked()
+{
+    if (ui->checkBox_2->isChecked())
+    {
+        ui->comboBox->setEnabled(false);
+    } else {
+        ui->comboBox->setEnabled(true);
+    }
 }
