@@ -24,6 +24,7 @@ signals:
     void giveQueryTypes(QStringList string);
     void getFoundRes(QList<QSqlRecord> fRecord, bool ch);
     void userID(int id);
+    void notOpenDB(QString dbopen);
 public slots:
     void getAddQuery(int user, int dateTime, QString qquery, QString org, QString fio, QString phone, QString comment);
     void getAddQueryT(int dateTime, QString sTime);

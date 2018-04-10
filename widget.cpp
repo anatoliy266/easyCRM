@@ -107,11 +107,15 @@ void Widget::updateTable(QSqlRelationalTableModel *m)
         ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     }
     ui->tableView->setSortingEnabled(true);
+
     //ui->tableView->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
     delegate = new NotEditableDelegate(this);
+    Tdelegate = new queryTypeEditDelegate(this);
+    connect(this, SIGNAL(giveQTypes(QStringList)), Tdelegate, SLOT(getQTypes(QStringList)));
+    emit giveQTypes(qTypes);
     ui->tableView->setItemDelegateForColumn(1, delegate);
     ui->tableView->setItemDelegateForColumn(2, delegate);
-    ui->tableView->setItemDelegateForColumn(4, delegate);
+    ui->tableView->setItemDelegateForColumn(4, Tdelegate);
 }
 
 void Widget::on_pushButton_2_clicked()
@@ -209,6 +213,7 @@ void Widget::getQueryTypes(QStringList strL)
     {
         ui->comboBox->addItem(strL.value(i));
     }
+    qTypes = strL;
 }
 
 void Widget::getUsername(QList<QSqlRecord> uList)

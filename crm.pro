@@ -29,14 +29,16 @@ SOURCES += \
     user.cpp \
     addcall.cpp \
     dbquery.cpp \
-    noteditabledelegate.cpp
+    noteditabledelegate.cpp \
+    querytypeeditdelegate.cpp
 
 HEADERS += \
         widget.h \
     user.h \
     addcall.h \
     dbquery.h \
-    noteditabledelegate.h
+    noteditabledelegate.h \
+    querytypeeditdelegate.h
 
 FORMS += \
         widget.ui \

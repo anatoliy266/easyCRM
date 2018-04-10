@@ -15,6 +15,7 @@
 #include <QStyledItemDelegate>
 #include "noteditabledelegate.h"
 #include <QClipboard>
+#include "querytypeeditdelegate.h"
 
 namespace Ui {
 class Widget;
@@ -33,6 +34,7 @@ signals:
     void properties();
     void upd();
     void userToId(QString u);
+    void giveQTypes(QStringList qTypes);
 public slots:
     void getId(int ID, QString uName);
     void updateTable(QSqlRelationalTableModel* m);
@@ -61,10 +63,12 @@ private:
     QSqlRecord rec;
     QList<QVariant> uT;
     NotEditableDelegate* delegate;
+    queryTypeEditDelegate* Tdelegate;
     QString changeVal;
     //QBrush *brush;
     //QPalette *palette;
     bool editStrategy;
+    QStringList qTypes;
 
 };
 

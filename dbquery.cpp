@@ -5,7 +5,6 @@ DBquery::DBquery(QObject *parent) : QObject(parent)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("P:\\1\\123.db");
-    db.open();
 }
 
 DBquery::~DBquery()
@@ -15,6 +14,11 @@ DBquery::~DBquery()
 
 void DBquery::getAddQuery(int user, int dateTime, QString qquery, QString org, QString fio, QString phone, QString comment)
 {
+    db.open();
+    if (!db.open())
+    {
+        emit notOpenDB("ERROR");
+    } else {
     QSqlQuery query;
     QString strQuery = "INSERT INTO crm(user, dateTime, org, query, fio, telephone, comment)"
                        "VALUES(:user, :dateTime, :org, :query, :fio, :telephone, :comment)";
@@ -27,10 +31,13 @@ void DBquery::getAddQuery(int user, int dateTime, QString qquery, QString org, Q
     query.bindValue(":telephone", phone);
     query.bindValue(":comment", comment);
     query.exec();
+    db.close();
+    }
 }
 
 void DBquery::getTableContext()
 {
+    db.open();
     QSqlQuery query;
     query.exec("SELECT * FROM crm");
     if (!query.exec())
@@ -42,10 +49,12 @@ void DBquery::getTableContext()
         }
     }
     emit updateTableSig(rList);
+    db.close();
 }
 
 void DBquery::checkUser()
 {
+    db.open();
     if (db.open())
     {
         QSqlQuery query;
@@ -59,10 +68,12 @@ void DBquery::checkUser()
         }
         emit userList(lRec);
     }
+    db.close();
 }
 
 void DBquery::updTable()
 {
+    db.open();
     model = new QSqlRelationalTableModel();
     model->setTable("crm");
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
@@ -76,11 +87,13 @@ void DBquery::updTable()
     model->setSort(0, Qt::AscendingOrder);
     model->setEditStrategy(QSqlTableModel::OnFieldChange);
     emit updateTable(model);
+    db.close();
 
 }
 
 void DBquery::queryTypes()
 {
+    db.open();
     str.clear();
     if (db.open())
     {
@@ -97,10 +110,12 @@ void DBquery::queryTypes()
         }
     }
     emit giveQueryTypes(str);
+    db.close();
 }
 
 void DBquery::userToID(QString u)
 {
+    db.open();
     QSqlQuery qq;
     int id;
     qq.exec("SELECT id_user FROM users WHERE user LIKE '"+u+"'");
@@ -109,11 +124,12 @@ void DBquery::userToID(QString u)
         id = qq.record().field(0).value().toInt();
         emit userID(id);
     }
-
+    db.close();
 }
 
 void DBquery::getAddQueryT(int dateTime, QString sTime)
 {
+    db.open();
     QSqlQuery queryT;
     QString strQueryT = "INSERT INTO time(unixTime, strTime)"
                         "VALUES(:unixTime, :strTime)";
@@ -121,4 +137,5 @@ void DBquery::getAddQueryT(int dateTime, QString sTime)
     queryT.bindValue(":unixTime", dateTime);
     queryT.bindValue(":strTime", sTime);
     queryT.exec();
+    db.close();
 }

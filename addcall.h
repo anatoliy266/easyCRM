@@ -23,6 +23,7 @@ signals:
 public slots:
     void getID(int ID);
     void getQueryTypes(QStringList str);
+    void notOpenDB(QString dbopen);
 private slots:
     void on_pushButton_clicked();
 

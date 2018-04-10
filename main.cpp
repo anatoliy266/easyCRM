@@ -2,6 +2,7 @@
 #include "widget.h"
 #include "dbquery.h"
 #include "addcall.h"
+#include "querytypeeditdelegate.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -11,6 +12,7 @@ int main(int argc, char *argv[])
     Widget w;
     addcall ac;
     DBquery dbq;
+    //queryTypeEditDelegate QeD;
     QObject::connect(&u, SIGNAL(authSig(int,QString)), &w, SLOT(getId(int,QString)));
     QObject::connect(&ac, SIGNAL(addQuery(int,int,QString,QString,QString,QString, QString)), &dbq, SLOT(getAddQuery(int,int,QString,QString,QString,QString, QString)));
     QObject::connect(&ac, SIGNAL(addQueryT(int,QString)), &dbq, SLOT(getAddQueryT(int,QString)));
@@ -38,6 +40,11 @@ int main(int argc, char *argv[])
     QObject::connect(&dbq, SIGNAL(userID(int)), &w, SLOT(getUserId(int)));
 
     QObject::connect(&ac, SIGNAL(onlyMe()), &w, SLOT(on_pushButton_3_clicked()));
+
+    QObject::connect(&dbq, SIGNAL(notOpenDB(QString)), &ac, SLOT(notOpenDB(QString)));
+
+    //QObject::connect(&dbq, SIGNAL(giveQueryTypes(QStringList)),&QeD, SLOT(getQTypes(QStringList)));
+    //QObject::connect(&QeD, SIGNAL(QTypes()), &dbq, SLOT(queryTypes()));
     u.show();
     return a.exec();
 }

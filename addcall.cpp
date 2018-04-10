@@ -57,3 +57,8 @@ void addcall::getQueryTypes(QStringList str)
         ui->comboBox->update();
     }
 }
+
+void addcall::notOpenDB(QString dbopen)
+{
+    QMessageBox::information(this, dbopen, "DATABASE ISN'T OPEN!!!");
+}
